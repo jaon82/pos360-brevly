@@ -1,0 +1,23 @@
+{
+  "name": "brevly-server",
+  "version": "1.0.0",
+  "description": "URL Shortener",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "dev": "tsx watch src/infra/http/server.ts"
+  },
+  "author": "Jean Nunes",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^24.3.0",
+    "tsx": "^4.20.5",
+    "typescript": "^5.9.2"
+  },
+  "dependencies": {
+    "@fastify/cors": "^11.1.0",
+    "fastify": "^5.5.0",
+    "fastify-type-provider-zod": "^6.0.0",
+    "zod": "^4.1.5"
+  }
+}
