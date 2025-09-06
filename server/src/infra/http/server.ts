@@ -17,10 +17,12 @@ server.setSerializerCompiler(serializerCompiler);
 
 server.setErrorHandler((error, request, reply) => {
   if (hasZodFastifySchemaValidationErrors(error)) {
-    return reply.status(400).send({
-      message: "Validation error",
-      issues: error.validation,
-    });
+    //Retorna um array contendo o campo e a mensagem de erro
+    const errors = error.validation.map((issue) => ({
+      field: issue.instancePath.replace(/^\//, ""),
+      message: issue.message,
+    }));
+    return reply.status(400).send({ message: "Validation error", errors });
   }
 
   // Envia o erro p/ alguma ferramenta de observabilidade (Sentry/DataDog/Grafana/Open Telemetry)
