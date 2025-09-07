@@ -5,25 +5,25 @@ import z from "zod";
 import { ExistingLinkError } from "./errors/existing-link";
 
 const createLinkInput = z.object({
-  originalUrl: z.url(),
-  shortUrl: z.url(),
+  url: z.url(),
+  alias: z.string(),
 });
 
 type CreateLinkInput = z.input<typeof createLinkInput>;
 
 interface CreateLinkOutput {
-  urlId: string;
-  shortUrl: string;
-  originalUrl: string;
+  id: string;
+  alias: string;
+  url: string;
 }
 
 export async function createLink(
   input: CreateLinkInput
 ): Promise<Either<ExistingLinkError, CreateLinkOutput>> {
-  const { originalUrl, shortUrl } = createLinkInput.parse(input);
-  //Verificar se shortUrl já existe na base de dados
+  const { url, alias } = createLinkInput.parse(input);
+  //Verificar se alias já existe na base de dados
   const existingLink = await db.query.links.findFirst({
-    where: (links, { eq }) => eq(links.shortUrl, shortUrl),
+    where: (links, { eq }) => eq(links.alias, alias),
   });
   if (existingLink) {
     return makeLeft(new ExistingLinkError());
@@ -32,14 +32,14 @@ export async function createLink(
   const newLink = await db
     .insert(schema.links)
     .values({
-      originalUrl,
-      shortUrl,
+      url,
+      alias,
     })
     .returning();
   //Retornar os dados do novo link
   return makeRight({
-    urlId: newLink[0].id,
-    shortUrl: newLink[0].shortUrl,
-    originalUrl: newLink[0].originalUrl,
+    id: newLink[0].id,
+    alias: newLink[0].alias,
+    url: newLink[0].url,
   });
 }

@@ -10,28 +10,28 @@ import { ExistingLinkError } from "./errors/existing-link";
 describe("Create link", () => {
   it("should be able to create a link", async () => {
     const newLink = {
-      originalUrl: `http://${randomUUID()}.com`,
-      shortUrl: `http://brev.ly/${randomUUID()}`,
+      url: `http://${randomUUID()}.com`,
+      alias: `http://brev.ly/${randomUUID()}`,
     };
     const sut = await createLink(newLink);
     expect(isRight(sut)).toBe(true);
     const result = await db
       .select()
       .from(schema.links)
-      .where(eq(schema.links.shortUrl, newLink.shortUrl));
+      .where(eq(schema.links.alias, newLink.alias));
     expect(result).toHaveLength(1);
   });
 
   it("should not be able to create an existing short URL", async () => {
-    const shortUrl = `http://brev.ly/${randomUUID()}`;
+    const alias = `http://brev.ly/${randomUUID()}`;
     const newLink = {
-      originalUrl: `http://${randomUUID()}.com`,
-      shortUrl,
+      url: `http://${randomUUID()}.com`,
+      alias,
     };
     await createLink(newLink);
     const sut = await createLink({
-      originalUrl: `http://${randomUUID()}.com`,
-      shortUrl,
+      url: `http://${randomUUID()}.com`,
+      alias,
     });
     expect(isLeft(sut)).toBe(true);
     expect(unwrapEither(sut)).toBeInstanceOf(ExistingLinkError);
