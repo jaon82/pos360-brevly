@@ -1,40 +1,27 @@
-import { isRight, unwrapEither } from "@/infra/shared/either";
+import { db } from "@/infra/db";
+import { schema } from "@/infra/db/schemas";
+import { unwrapEither } from "@/infra/shared/either";
+import { makeLink } from "@/test/factories/make-link";
+import { eq } from "drizzle-orm";
 import { randomUUID } from "node:crypto";
 import { describe, expect, it } from "vitest";
-import { createLink } from "./create-link";
 import { deleteLink } from "./delete-link";
 import { NotFoundError } from "./errors/not-found";
-import { getLink } from "./get-link";
 
 describe("Delete link", () => {
   it("should be able to delete a link by its id", async () => {
     const alias = randomUUID();
-    const newLink = {
-      url: `http://${randomUUID()}.com`,
-      alias,
-    };
-    const result = await createLink(newLink);
-    expect(isRight(result)).toBe(true);
-    if (isRight(result)) {
-      const createdLink = unwrapEither(result);
-      await deleteLink(createdLink.id);
-      const sut = await getLink({
-        alias: createdLink.alias,
-      });
-      expect(unwrapEither(sut)).toBeInstanceOf(NotFoundError);
-    }
+    const newLink = await makeLink({ alias });
+    await deleteLink(newLink.id);
+    const result = await db
+      .select()
+      .from(schema.links)
+      .where(eq(schema.links.alias, newLink.alias));
+    expect(result).toHaveLength(0);
   });
   it("should not be able to delete a link with an existent id", async () => {
-    const alias = randomUUID();
-    const newLink = {
-      url: `http://${randomUUID()}.com`,
-      alias,
-    };
-    const result = await createLink(newLink);
-    expect(isRight(result)).toBe(true);
-    if (isRight(result)) {
-      const sut = await deleteLink("non-existent-id");
-      expect(unwrapEither(sut)).toBeInstanceOf(NotFoundError);
-    }
+    await makeLink();
+    const sut = await deleteLink("non-existent-id");
+    expect(unwrapEither(sut)).toBeInstanceOf(NotFoundError);
   });
 });

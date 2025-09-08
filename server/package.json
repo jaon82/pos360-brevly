@@ -18,6 +18,7 @@
   "author": "Jean Nunes",
   "license": "ISC",
   "devDependencies": {
+    "@faker-js/faker": "^10.0.0",
     "@types/node": "^24.3.0",
     "dotenv-cli": "^10.0.0",
     "drizzle-kit": "^0.31.4",
