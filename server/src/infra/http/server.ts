@@ -10,7 +10,8 @@ import {
 } from "fastify-type-provider-zod";
 import { createLinkRoute } from "./routes/create-link";
 import { deleteLinkRoute } from "./routes/delete-link";
-import { getLinkRoute } from "./routes/get-links";
+import { getLinkRoute } from "./routes/get-link";
+import { getLinksRoute } from "./routes/get-links";
 
 const server = fastify();
 
@@ -50,6 +51,7 @@ server.register(fastifySwaggerUi, {
 
 server.register(createLinkRoute);
 server.register(deleteLinkRoute);
+server.register(getLinksRoute);
 server.register(getLinkRoute);
 
 server

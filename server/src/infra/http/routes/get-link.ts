@@ -1,29 +1,32 @@
 import { isLeft, unwrapEither } from "@/infra/shared/either";
-import { deleteLink } from "@/services/delete-link";
+import { getLink } from "@/services/get-link";
 import type { FastifyPluginAsyncZod } from "fastify-type-provider-zod";
 import { z } from "zod";
 
-export const deleteLinkRoute: FastifyPluginAsyncZod = async (server) => {
-  server.delete(
-    "/links/:id",
+export const getLinkRoute: FastifyPluginAsyncZod = async (server) => {
+  server.get(
+    "/links/:alias",
     {
       schema: {
-        summary: "Delete a link by ID",
+        summary: "Get link by alias",
         tags: ["Links"],
         params: z.object({
-          id: z.string().describe("ID of the link to be deleted"),
+          alias: z.string(),
         }),
         response: {
-          204: z.object({}),
-          404: z
-            .object({ message: z.string(), errors: z.any().optional() })
-            .describe("Resource not found"),
+          200: z.object({
+            id: z.string(),
+            url: z.url(),
+          }),
+          404: z.object({ message: z.string() }).describe("Resource not found"),
         },
       },
     },
     async (request, reply) => {
-      const { id } = request.params;
-      const result = await deleteLink(id);
+      const { alias } = request.params;
+      const result = await getLink({
+        alias,
+      });
       if (isLeft(result)) {
         const error = unwrapEither(result);
         switch (error.constructor.name) {
@@ -31,7 +34,8 @@ export const deleteLinkRoute: FastifyPluginAsyncZod = async (server) => {
             return reply.status(404).send({ message: error.message });
         }
       } else {
-        return reply.status(204).send();
+        const link = unwrapEither(result);
+        return reply.status(200).send(link);
       }
     }
   );
