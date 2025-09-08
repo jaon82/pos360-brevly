@@ -6,7 +6,7 @@ import { getLink } from "./get-link";
 
 describe("Get link by alias", () => {
   it("should be able to get a link by short url", async () => {
-    const alias = `http://brev.ly/${randomUUID()}`;
+    const alias = randomUUID();
     const newLink = {
       url: `http://${randomUUID()}.com`,
       alias,

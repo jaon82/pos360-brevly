@@ -11,7 +11,7 @@ describe("Create link", () => {
   it("should be able to create a link", async () => {
     const newLink = {
       url: `http://${randomUUID()}.com`,
-      alias: `http://brev.ly/${randomUUID()}`,
+      alias: randomUUID(),
     };
     const sut = await createLink(newLink);
     expect(isRight(sut)).toBe(true);
@@ -23,7 +23,7 @@ describe("Create link", () => {
   });
 
   it("should not be able to create an existing short URL", async () => {
-    const alias = `http://brev.ly/${randomUUID()}`;
+    const alias = randomUUID();
     const newLink = {
       url: `http://${randomUUID()}.com`,
       alias,
