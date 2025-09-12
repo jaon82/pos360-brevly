@@ -3,6 +3,7 @@ import { schema } from "@/infra/db/schemas";
 import { type Either, makeRight } from "@/infra/shared/either";
 import { uploadFileToStorage } from "@/infra/storage/upload-file-to-storage";
 import { stringify } from "csv-stringify";
+import { desc } from "drizzle-orm";
 import { PassThrough, Transform } from "node:stream";
 import { pipeline } from "node:stream/promises";
 
@@ -20,6 +21,9 @@ export async function exportLinks(): Promise<Either<never, ExportLinksOutput>> {
       createdAt: schema.links.createdAt,
     })
     .from(schema.links)
+    .orderBy((fields) => {
+      return desc(fields.id);
+    })
     .toSQL();
   const cursor = pg.unsafe(sql).cursor(2);
   const csv = stringify({
