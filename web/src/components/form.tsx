@@ -9,7 +9,7 @@ export default function Form() {
         <CardTitle>Novo link</CardTitle>
       </CardHeader>
       <CardContent>
-        <form className="flex flex-col gap-4">
+        <form className="flex flex-col gap-4 sm:min-w-[19.75rem]">
           <Input
             id="originalLink"
             label="link original"

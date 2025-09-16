@@ -5,7 +5,7 @@ import { Separator } from "./ui/separator";
 
 export default function MyLinks() {
   return (
-    <Card>
+    <Card className="sm:flex-1">
       <CardHeader>
         <CardTitle className="flex justify-between items-center">
           <span>Meus links</span>
