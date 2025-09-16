@@ -31,3 +31,9 @@
   --text-xs--line-height: 0.875rem;
   --text-xs--font-weight: 400;
 }
+
+@layer base {
+  body {
+    @apply bg-gray-200;
+  }
+}

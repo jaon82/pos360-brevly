@@ -10,7 +10,15 @@ interface InputProps extends React.ComponentProps<"input"> {
   error?: string;
 }
 
-function Input({ className, type, label, error, id, ...props }: InputProps) {
+function Input({
+  className,
+  type,
+  label,
+  error,
+  id,
+  prefix,
+  ...props
+}: InputProps) {
   return (
     <div className={cn("group flex flex-col gap-2 w-full", className)}>
       <Label
@@ -28,21 +36,23 @@ function Input({ className, type, label, error, id, ...props }: InputProps) {
       <div
         className={cn(
           "flex items-center w-full",
-          "gap-2 h-12 px-4 border-gray-300 border rounded-lg",
+          "h-12 px-4 border-gray-300 border rounded-lg",
+          "text-md font-normal",
           error
             ? "border-danger border-2"
             : "group-has-[input:active]:border-blue-base group-has-[input:active]:border-2",
-
+          prefix ? "gap-0" : "gap-2",
           className
         )}
       >
+        {prefix && <span className="text-gray-400">{prefix}</span>}
         <input
           id={id}
           type={type}
           data-slot="input"
           className={cn(
             "flex w-full min-w-0 bg-transparent outline-none disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50",
-            "text-md text-gray-400 font-normal [&:not(:placeholder-shown)]:text-dangergray-600",
+            "text-gray-400 [&:not(:placeholder-shown)]:text-gray-600",
             className
           )}
           {...props}
