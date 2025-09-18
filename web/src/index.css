@@ -35,5 +35,12 @@
 @layer base {
   body {
     @apply bg-gray-200;
+
+    ::-webkit-scrollbar {
+      @apply w-3; /* Set scrollbar width */
+    }
+    ::-webkit-scrollbar-thumb {
+      @apply bg-blue-base; /* Apply Tailwind background colors and rounded corners */
+    }
   }
 }

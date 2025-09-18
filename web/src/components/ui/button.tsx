@@ -12,7 +12,7 @@ const buttonVariants = cva(
         primary:
           "bg-blue-base text-md text-white rounded-lg hover:bg-blue-dark cursor-pointer",
         secondary:
-          "bg-gray-200 text-sm text-gray-500 rounded-sm hover:border border-blue-base cursor-pointer",
+          "bg-gray-200 text-sm text-gray-500 rounded-sm border border-transparent hover:border hover:border-blue-base hover:cursor-pointer",
       },
       size: {
         default: "h-12 px-5 gap-3 w-full",

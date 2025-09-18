@@ -3,7 +3,7 @@ import { Card, CardContent } from "@/components/ui/card";
 
 export default function LinkRedirection() {
   return (
-    <div className="max-w-screen-xl h-dvh mx-auto flex flex-col justify-center px-3">
+    <div className="max-w-5xl h-dvh mx-auto flex flex-col justify-center px-3">
       <Card className="py-12 px-5">
         <CardContent className="flex flex-col items-center gap-6">
           <img src={logoIcon} className="h-12" />
