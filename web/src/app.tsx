@@ -13,8 +13,8 @@ export default function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/:alias" element={<LinkRedirection />} />
           <Route path="/404" element={<NotFound />} />
+          <Route path="/:alias" element={<LinkRedirection />} />
         </Routes>
       </BrowserRouter>
       <Toaster richColors />

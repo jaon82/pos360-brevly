@@ -1,20 +1,59 @@
 import { getLink } from "@/api/getLink";
+import { updateLinkViews } from "@/api/updateLinkViews";
 import logoIcon from "@/assets/icon.svg";
 import { Card, CardContent } from "@/components/ui/card";
-import { useQuery } from "@tanstack/react-query";
-import { useParams } from "react-router";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { isAxiosError } from "axios";
+import { useEffect } from "react";
+import { useNavigate, useParams } from "react-router";
+import { toast } from "sonner";
 
 export default function LinkRedirection() {
+  const queryClient = useQueryClient();
   const { alias } = useParams();
+  const navigate = useNavigate();
 
-  const { data: linkData, isSuccess } = useQuery({
+  const { data: linkData, isError } = useQuery({
     enabled: !!alias,
     queryKey: ["get-link"],
     queryFn: () => getLink(alias!),
+    retry: (failureCount, error) => {
+      // Do not retry on 404 errors
+      if (error.message.includes("404")) {
+        return false;
+      }
+      // Retry up to 3 times for other errors
+      return failureCount < 3;
+    },
   });
 
-  if (isSuccess) {
-    window.location.href = linkData.url;
+  const { mutateAsync: updateLinkViewsFn } = useMutation({
+    mutationFn: updateLinkViews,
+    onSuccess() {
+      queryClient.invalidateQueries({ queryKey: ["get-links"] });
+      if (linkData?.url) {
+        window.location.href = linkData.url;
+      }
+    },
+    onError(error) {
+      if (isAxiosError(error)) {
+        toast.error("Erro ao atualizar views", {
+          description: error.response?.data.message,
+        });
+      } else {
+        toast.error(`Erro ao atualizar views.`);
+      }
+    },
+  });
+
+  useEffect(() => {
+    if (linkData) {
+      updateLinkViewsFn(linkData.id);
+    }
+  }, [linkData, updateLinkViewsFn]);
+
+  if (isError) {
+    navigate("/404");
   }
 
   return (
