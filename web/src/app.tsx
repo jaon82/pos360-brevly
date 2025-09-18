@@ -13,7 +13,7 @@ export default function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/:url-alias" element={<LinkRedirection />} />
+          <Route path="/:alias" element={<LinkRedirection />} />
           <Route path="/404" element={<NotFound />} />
         </Routes>
       </BrowserRouter>

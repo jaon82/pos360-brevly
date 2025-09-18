@@ -52,7 +52,9 @@ export default function LinkCard({ linkData }: LinkCardProps) {
       <div className="grid grid-cols-4 gap-4 items-center py-0.5">
         <div className="flex flex-col gap-1 col-span-2">
           <span className="text-md text-blue-base">
-            <Link to={`/${linkData.alias}`}>brev.ly/{linkData.alias}</Link>
+            <Link to={`/${linkData.alias}`} target="_blank">
+              brev.ly/{linkData.alias}
+            </Link>
           </span>
           <span className="text-sm text-gray-500 font-normal h-4 overflow-hidden overflow-ellipsis">
             {linkData.url}
