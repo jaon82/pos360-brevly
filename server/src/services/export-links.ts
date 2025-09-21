@@ -33,7 +33,7 @@ export async function exportLinks(): Promise<Either<never, ExportLinksOutput>> {
       { key: "id", header: "ID" },
       { key: "url", header: "Original URL" },
       { key: "alias", header: "URL alias" },
-      { key: "views", header: "Views" },
+      { key: "views", header: "Access Count" },
       { key: "created_at", header: "Created at" },
     ],
   });

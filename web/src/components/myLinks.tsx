@@ -1,3 +1,4 @@
+import { downloadLinks } from "@/api/downloadLinks";
 import { getLinks } from "@/api/getLinks";
 import { DownloadSimpleIcon, LinkIcon } from "@phosphor-icons/react";
 import { useQuery } from "@tanstack/react-query";
@@ -12,12 +13,22 @@ export default function MyLinks() {
     queryFn: getLinks,
   });
 
+  const handleDownload = async () => {
+    const exportLink = await downloadLinks();
+    window.open(exportLink.reportUrl, "_blank");
+  };
+
   return (
     <Card className="sm:flex-1 gap-4 mb-4">
       <CardHeader>
         <CardTitle className="flex justify-between items-center">
           <span>Meus links</span>
-          <Button variant="secondary" size="sm" disabled>
+          <Button
+            variant="secondary"
+            size="sm"
+            disabled={linksData?.length === 0}
+            onClick={handleDownload}
+          >
             <DownloadSimpleIcon />
             Baixar CSV
           </Button>

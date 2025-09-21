@@ -68,7 +68,7 @@ export default function LinkCard({ linkData }: LinkCardProps) {
             <CopyIcon />
           </Button>
           <AlertDialog>
-            <AlertDialogTrigger>
+            <AlertDialogTrigger asChild>
               <Button variant="secondary" size="sm">
                 <TrashIcon />
               </Button>

@@ -42,7 +42,7 @@ describe("Export links", () => {
     expect(isRight(sut)).toBe(true);
     expect(unwrapEither(sut).reportUrl).toBe("http://example.com/file.csv");
     expect(csvAsArray.slice(0, 6)).toEqual([
-      ["ID", "Original URL", "URL alias", "Views", "Created at"],
+      ["ID", "Original URL", "URL alias", "Access Count", "Created at"],
       [
         link5.id,
         link5.url,
