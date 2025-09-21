@@ -1,4 +1,5 @@
 import { deleteLink } from "@/api/deletetLink";
+import { env } from "@/env";
 import type { LinksResponse } from "@/interfaces/links";
 import { CopyIcon, TrashIcon } from "@phosphor-icons/react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -46,6 +47,19 @@ export default function LinkCard({ linkData }: LinkCardProps) {
     }
   }
 
+  async function handleCopyLink() {
+    try {
+      await navigator.clipboard.writeText(
+        `${env.VITE_FRONTEND_URL}/${linkData.alias}`
+      );
+      toast.info("Link copiado com sucesso", {
+        description: `O link ${linkData.alias} foi copiado para a área de transferência.`,
+      });
+    } catch {
+      toast.error("Erro ao copiar link.");
+    }
+  }
+
   return (
     <>
       <Separator className="mb-3" />
@@ -64,7 +78,7 @@ export default function LinkCard({ linkData }: LinkCardProps) {
           {`${linkData.views} ${linkData.views > 1 ? "acessos" : "acesso"}`}
         </div>
         <div className="flex gap-1">
-          <Button variant="secondary" size="sm">
+          <Button variant="secondary" size="sm" onClick={handleCopyLink}>
             <CopyIcon />
           </Button>
           <AlertDialog>
