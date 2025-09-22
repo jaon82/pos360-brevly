@@ -3,6 +3,7 @@ import { schema } from "@/infra/db/schemas";
 import { Either, makeLeft, makeRight } from "@/infra/shared/either";
 import z from "zod";
 import { ExistingLinkError } from "./errors/existing-link";
+import { InvalidLinkError } from "./errors/invalid-link";
 
 const createLinkInput = z.object({
   url: z.url(),
@@ -21,6 +22,11 @@ export async function createLink(
   input: CreateLinkInput
 ): Promise<Either<ExistingLinkError, CreateLinkOutput>> {
   const { url, alias } = createLinkInput.parse(input);
+  //Verificar se alias é uma string minúscula e sem espaço/caracter especial
+  if (!/^[a-z0-9-]+$/.test(alias)) {
+    return makeLeft(new InvalidLinkError());
+  }
+
   //Verificar se alias já existe na base de dados
   const existingLink = await db.query.links.findFirst({
     where: (links, { eq }) => eq(links.alias, alias),

@@ -1,11 +1,13 @@
 import { db } from "@/infra/db";
 import { schema } from "@/infra/db/schemas";
 import { isLeft, isRight, unwrapEither } from "@/infra/shared/either";
+import { faker } from "@faker-js/faker";
 import { eq } from "drizzle-orm";
 import { randomUUID } from "node:crypto";
 import { describe, expect, it } from "vitest";
 import { createLink } from "./create-link";
 import { ExistingLinkError } from "./errors/existing-link";
+import { InvalidLinkError } from "./errors/invalid-link";
 
 describe("Create link", () => {
   it("should be able to create a link", async () => {
@@ -35,5 +37,16 @@ describe("Create link", () => {
     });
     expect(isLeft(sut)).toBe(true);
     expect(unwrapEither(sut)).toBeInstanceOf(ExistingLinkError);
+  });
+
+  it("should not be able to create an invalid short URL", async () => {
+    const alias = "invalid alias!";
+    const newLink = {
+      url: faker.internet.url(),
+      alias,
+    };
+    const sut = await createLink(newLink);
+    expect(isLeft(sut)).toBe(true);
+    expect(unwrapEither(sut)).toBeInstanceOf(InvalidLinkError);
   });
 });
