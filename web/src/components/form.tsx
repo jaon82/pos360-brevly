@@ -54,7 +54,7 @@ export default function Form() {
   }
 
   return (
-    <Card className="sm:min-w-md h-fit">
+    <Card className="sm:min-w-md h-fit min-h-80">
       <CardHeader>
         <CardTitle>Novo link</CardTitle>
       </CardHeader>

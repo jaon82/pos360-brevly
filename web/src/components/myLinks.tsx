@@ -1,6 +1,10 @@
 import { downloadLinks } from "@/api/downloadLinks";
 import { getLinks } from "@/api/getLinks";
-import { DownloadSimpleIcon, LinkIcon } from "@phosphor-icons/react";
+import {
+  DownloadSimpleIcon,
+  LinkIcon,
+  SpinnerIcon,
+} from "@phosphor-icons/react";
 import { useQuery } from "@tanstack/react-query";
 import LinkCard from "./linkCard";
 import { Button } from "./ui/button";
@@ -8,7 +12,11 @@ import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 import { Separator } from "./ui/separator";
 
 export default function MyLinks() {
-  const { data: linksData } = useQuery({
+  const {
+    data: linksData,
+    isLoading,
+    isSuccess,
+  } = useQuery({
     queryKey: ["get-links"],
     queryFn: getLinks,
   });
@@ -19,7 +27,7 @@ export default function MyLinks() {
   };
 
   return (
-    <Card className="sm:flex-1 gap-4 mb-4">
+    <Card className="sm:flex-1 gap-4 mb-4 min-h-80">
       <CardHeader>
         <CardTitle className="flex justify-between items-center">
           <span>Meus links</span>
@@ -34,9 +42,22 @@ export default function MyLinks() {
           </Button>
         </CardTitle>
       </CardHeader>
-      <CardContent className="flex flex-col gap-3 overflow-y-auto max-h-[19rem] md:max-h-[calc(100dvh-13rem)]">
-        {linksData && linksData.length > 0 ? (
+      <CardContent
+        className={`flex flex-col gap-3 ${
+          isLoading
+            ? "h-full"
+            : "overflow-y-auto max-h-[19rem] md:max-h-[calc(100dvh-13rem)]"
+        }`}
+      >
+        {isSuccess && linksData && linksData.length > 0 ? (
           linksData.map((link) => <LinkCard key={link.id} linkData={link} />)
+        ) : isLoading ? (
+          <div className="flex flex-col flex-1 gap-2 justify-center items-center">
+            <SpinnerIcon size={32} className="animate-spin" />
+            <div className="text-xs text-gray-500 uppercase">
+              carregando links...
+            </div>
+          </div>
         ) : (
           <>
             <Separator className="mb-4" />
