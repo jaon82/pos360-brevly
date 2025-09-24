@@ -9,6 +9,7 @@ import { useQuery } from "@tanstack/react-query";
 import LinkCard from "./linkCard";
 import { Button } from "./ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
+import { Progress } from "./ui/progress";
 import { Separator } from "./ui/separator";
 
 export default function MyLinks() {
@@ -27,7 +28,12 @@ export default function MyLinks() {
   };
 
   return (
-    <Card className="sm:flex-1 gap-4 mb-4 min-h-80">
+    <Card className="sm:flex-1 gap-4 mb-4 min-h-80 relative">
+      {isLoading && (
+        <div className="w-full absolute top-0 left-0 overflow-hidden">
+          <Progress value={20} className="h-1 animate-loading" />
+        </div>
+      )}
       <CardHeader>
         <CardTitle className="flex justify-between items-center">
           <span>Meus links</span>

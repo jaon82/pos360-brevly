@@ -30,6 +30,16 @@
   --text-xs: 0.625rem;
   --text-xs--line-height: 0.875rem;
   --text-xs--font-weight: 400;
+
+  --animate-loading: loading 1s ease-in-out infinite;
+  @keyframes loading {
+    0% {
+      transform: translateX(-200px);
+    }
+    100% {
+      transform: translateX(600px);
+    }
+  }
 }
 
 @layer base {
