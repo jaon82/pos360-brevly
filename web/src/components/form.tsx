@@ -1,6 +1,6 @@
 import { createLink } from "@/api/createLink";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { isAxiosError } from "axios";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
@@ -22,6 +22,7 @@ const formSchema = z.object({
 type TLinkForm = z.infer<typeof formSchema>;
 
 export default function Form() {
+  const queryClient = useQueryClient();
   const {
     register,
     handleSubmit,
@@ -33,6 +34,9 @@ export default function Form() {
 
   const { mutateAsync: createLinkFn } = useMutation({
     mutationFn: createLink,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["get-links"] });
+    },
   });
 
   async function handleSaveLink(formData: TLinkForm) {

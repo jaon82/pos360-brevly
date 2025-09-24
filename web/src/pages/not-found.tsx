@@ -15,7 +15,7 @@ export default function NotFound() {
             </p>
             <p>
               Saiba mais em{" "}
-              <a href="#" className="text-md text-blue-base">
+              <a href="/" className="text-md text-blue-base">
                 brev.ly
               </a>
               .

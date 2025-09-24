@@ -62,8 +62,8 @@ export default function LinkCard({ linkData }: LinkCardProps) {
 
   return (
     <>
-      <Separator className="mb-3" />
-      <div className="grid grid-cols-4 gap-4 items-center py-0.5">
+      <Separator className="mb-3 mx-3" />
+      <div className="grid grid-cols-4 gap-4 items-center py-0.5 px-3 lg:px-0">
         <div className="flex flex-col gap-1 col-span-2">
           <span className="text-md text-blue-base">
             <Link to={`/${linkData.alias}`} target="_blank">
@@ -77,7 +77,7 @@ export default function LinkCard({ linkData }: LinkCardProps) {
         <div className="text-sm text-gray-500 font-normal">
           {`${linkData.views} ${linkData.views > 1 ? "acessos" : "acesso"}`}
         </div>
-        <div className="flex gap-1">
+        <div className="flex gap-1 justify-end">
           <Button variant="secondary" size="sm" onClick={handleCopyLink}>
             <CopyIcon />
           </Button>
